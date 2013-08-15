@@ -122,6 +122,7 @@ public class WeldTestUrlDeployment extends AbstractWeldSEDeployment {
 			Class.forName("javax.servlet.http.HttpServletRequest");
 			classesToProcess.add(InRequestInterceptor.class);
 			classesToProcess.add(InSessionInterceptor.class);
+			classesToProcess.add(InWindowInterceptor.class);
 			classesToProcess.add(InConversationInterceptor.class);
 		} catch (ClassNotFoundException e) {
 		}

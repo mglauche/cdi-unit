@@ -15,9 +15,12 @@
  */
 package org.jglue.cdiunit;
 
+import java.util.UUID;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.deltaspike.core.spi.scope.window.WindowContext;
 import org.jboss.weld.context.http.HttpConversationContext;
 import org.jboss.weld.context.http.HttpRequestContext;
 import org.jboss.weld.context.http.HttpSessionContext;
@@ -63,6 +66,41 @@ public class ContextController {
 
 	@Inject
 	private HttpConversationContext _conversationContext;
+	
+	@Inject
+	private WindowContext _windowContext;
+
+	private String windowId;
+	
+	/**
+	 * Start a Window 
+	 * 
+	 * @param request
+	 *            The request to make available.
+	 */
+	public void openWindow(HttpServletRequest request) {
+		// Window Scope needs an active session and an active request (to store the windowId)
+		SessionHolderAwareRequest sessionHolderAwareRequest = new SessionHolderAwareRequest(request);
+		_requestContext.associate(sessionHolderAwareRequest);
+		_requestContext.activate();
+		_sessionContext.associate(sessionHolderAwareRequest);
+		_sessionContext.activate();
+		windowId = UUID.randomUUID().toString();
+		_windowContext.activateWindow(windowId);
+	}
+
+	/**
+	 * Close the currently active request.
+	 */
+	public void closeWindow() {
+		_windowContext.closeWindow(windowId);
+		_requestContext.invalidate();
+		_requestContext.deactivate();
+		_sessionContext.invalidate();
+		_sessionContext.deactivate();
+	}
+
+
 
 	/**
 	 * Start a request.
