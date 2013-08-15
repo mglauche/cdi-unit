@@ -44,6 +44,10 @@ import javax.inject.Provider;
 import javax.interceptor.Interceptor;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.deltaspike.core.impl.scope.window.WindowBeanHolder;
+import org.apache.deltaspike.core.impl.scope.window.WindowContextProducer;
+import org.apache.deltaspike.core.impl.scope.window.WindowIdHolder;
+import org.apache.deltaspike.core.spi.scope.window.WindowContext;
 import org.jboss.weld.bootstrap.api.Bootstrap;
 import org.jboss.weld.bootstrap.spi.BeanDeploymentArchive;
 import org.jboss.weld.bootstrap.spi.BeanDiscoveryMode;
@@ -123,6 +127,9 @@ public class WeldTestUrlDeployment extends AbstractWeldSEDeployment {
 			classesToProcess.add(InRequestInterceptor.class);
 			classesToProcess.add(InSessionInterceptor.class);
 			classesToProcess.add(InWindowInterceptor.class);
+			classesToProcess.add(WindowContextProducer.class);
+			classesToProcess.add(WindowBeanHolder.class);
+			classesToProcess.add(WindowIdHolder.class);
 			classesToProcess.add(InConversationInterceptor.class);
 		} catch (ClassNotFoundException e) {
 		}
